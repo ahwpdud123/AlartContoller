@@ -6,36 +6,64 @@
 //  Copyright © 2018년 D7703_15. All rights reserved.
 //
 
+
+
+
 import UIKit
 
 class ViewController: UIViewController {
     
+    let timeSelector: Selector = #selector(ViewController.update)
+    let interval = 1.0
+    var count = 0
+    
+    @IBOutlet weak var timelbl: UILabel!
+    @IBOutlet weak var datepiker: UIDatePicker!
+    @IBOutlet weak var timelbl2: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        Timer.scheduledTimer(timeInterval: interval, target: self, selector: timeSelector, userInfo: nil, repeats: true)
     }
     
-    @IBAction func buttonPressed(_ sender: Any) {
-        let myAlert = UIAlertController(title: "알림", message: "설정된 시간이 되었습니다!!", preferredStyle: .actionSheet)
+    @IBAction func DatePiker(_ sender: UIDatePicker) {
+        let datePikerView = sender
         
-        // 세번째 인자를 클로져 사용
-        // 후행 클로져(Trailing Closure)
-        let okAction = UIAlertAction(title: "종료", style: .default) { (action: UIAlertAction) -> Void in
-            self.view.backgroundColor = UIColor.red
-        }
-        
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: { (action: UIAlertAction) -> Void in
-            self.view.backgroundColor = UIColor.green
-        })
-        
-        let testAction = UIAlertAction(title: "테스트", style: .default, handler:  nil)
-        
-        myAlert.addAction(okAction)
-        myAlert.addAction(cancelAction)
-        myAlert.addAction(testAction)
-        
-        present(myAlert, animated: true, completion: nil)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        timelbl.text = formatter.string(from: datePikerView.date)
     }
+    
+    
+    @objc func update() {
+    let date = NSDate()
+    let formatter = DateFormatter()
+    formatter.dateFormat = "HH:mm:ss"
+    timelbl2.text = formatter.string(from: date as Date)
+        
+    if timelbl.text == timelbl2.text {
+    view.backgroundColor = UIColor.red
+        
+    let alertController = UIAlertController(title: "알람", message: "설정된 시간입니다.", preferredStyle: UIAlertControllerStyle.alert)
+            
+    let DestructiveAction = UIAlertAction(title: "취소", style: UIAlertActionStyle.destructive) { (result : UIAlertAction) -> Void in
+        
+    }
+            
+    let okAction = UIAlertAction(title: "확인", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                
+    self.view.backgroundColor = UIColor.white
+                
+    }
+    alertController.addAction(DestructiveAction)
+    
+    alertController.addAction(okAction)
+    
+self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    
     
 }
 
